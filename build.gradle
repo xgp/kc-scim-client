@@ -14,27 +14,40 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    compileOnly 'org.keycloak:keycloak-core:18.0.0'
-    compileOnly 'org.keycloak:keycloak-server-spi:18.0.0'
-    compileOnly 'org.keycloak:keycloak-server-spi-private:18.0.0'
-    compileOnly 'org.keycloak:keycloak-services:18.0.0'
-    compileOnly 'org.keycloak:keycloak-model-jpa:18.0.0'
-    implementation 'io.github.resilience4j:resilience4j-retry:1.7.1'
-    implementation('com.unboundid.product.scim2:scim2-sdk-client:2.3.7') {
-        transitive false
-    }
-    implementation('com.unboundid.product.scim2:scim2-sdk-common:2.3.7') {
-        transitive false
-    }
-    implementation('org.wildfly.client:wildfly-client-config:1.0.1.Final') {
-        transitive false
-    }
-    implementation('org.jboss.resteasy:resteasy-client:4.7.6.Final') {
-        transitive false
-    }
-    implementation('org.jboss.resteasy:resteasy-client-api:4.7.6.Final') {
-        transitive false
-    }
+ext {
+    keycloakVersion = '21.0.1'
+    scimSdkVersion = '2.3.7'
+    resteasyVersion = '4.7.7.Final'
+}
 
+dependencies {
+    compileOnly "org.keycloak:keycloak-core:${keycloakVersion}"
+    compileOnly "org.keycloak:keycloak-server-spi:${keycloakVersion}"
+    compileOnly "org.keycloak:keycloak-server-spi-private:${keycloakVersion}"
+    compileOnly "org.keycloak:keycloak-services:${keycloakVersion}"
+    compileOnly "org.keycloak:keycloak-model-jpa:${keycloakVersion}"
+    implementation "io.github.resilience4j:resilience4j-retry:1.7.1"
+    implementation("com.unboundid.product.scim2:scim2-sdk-client:${scimSdkVersion}") {
+        transitive false
+    }
+    implementation("com.unboundid.product.scim2:scim2-sdk-common:${scimSdkVersion}") {
+        transitive false
+    }
+    implementation("org.wildfly.client:wildfly-client-config:1.0.1.Final") {
+        transitive false
+    }
+    implementation("org.jboss.resteasy:resteasy-client:${resteasyVersion}") {
+        transitive false
+    }
+    implementation("org.jboss.resteasy:resteasy-client-api:${resteasyVersion}") {
+        transitive false
+    }
+}
+
+task copyDependencies(type: Copy) {
+    from configurations.compileClasspath {
+        exclude group: "org.keycloak"
+        transitive true
+    }
+    into 'build/libs/'
 }

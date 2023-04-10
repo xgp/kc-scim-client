@@ -11,11 +11,11 @@ services:
     ports:
       - 5432:5432
   keycloak:
-    image: quay.io/keycloak/keycloak:18.0.0
+    image: quay.io/keycloak/keycloak:21.0.1
     build: .
     command: start-dev
     volumes:
-      - ./build/libs/keycloak-scim-1.0-SNAPSHOT-all.jar:/opt/keycloak/providers/keycloak-scim-1.0-SNAPSHOT-all.jar
+      - ./build/libs/:/opt/keycloak/providers/
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: postgres
